@@ -33,10 +33,10 @@ namespace Tests
                 Assert.AreEqual(4, packet.Header.Count);
 
                 Assert.IsNotNull(packet.AdaptationField);
-                Assert.AreEqual(120, packet.AdaptationField.Count);
+                Assert.AreEqual(121, packet.AdaptationField.Count);
 
                 Assert.IsNotNull(packet.Payload);
-                Assert.AreEqual(188-120-4, packet.Payload.Count);
+                Assert.AreEqual(188-121-4, packet.Payload.Count);
             }
         }
 

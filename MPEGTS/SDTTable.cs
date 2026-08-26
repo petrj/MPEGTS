@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static System.Collections.Specialized.BitVector32;
@@ -100,12 +100,12 @@ namespace MPEGTS
                 pos = pos + pointerField;
             }
 
-            if (bytes.Count < pos + 2)
+            if (bytes.Count < pos + 3)
                 return;
 
             ID = bytes[pos];
 
-            if (ID != 0x42)
+            if (ID != 0x42 && ID != 0x46)
                 return;
 
             SectionSyntaxIndicator = ((bytes[pos + 1] & 128) == 128);
@@ -113,17 +113,17 @@ namespace MPEGTS
             Reserved = Convert.ToByte((bytes[pos + 1] & 48) >> 4);
             SectionLength = Convert.ToInt32(((bytes[pos + 1] & 15) << 8) + bytes[pos + 2]);
 
-            if (SectionLength > bytes.Count)
+            if (bytes.Count < pos + 3 + SectionLength)
             {
-                throw new Exception("SDT: bad SectionLength!");
+                return;
             }
 
             Data = new byte[SectionLength];
             CRC = new byte[4];
 
             Data[0] = 0;
-            bytes.CopyTo(pointerField + 1, Data, 1, SectionLength - 1);
-            bytes.CopyTo(pointerField + SectionLength, CRC, 0, 4);
+            bytes.CopyTo(pos, Data, 1, SectionLength - 1);
+            bytes.CopyTo(pos + SectionLength - 1, CRC, 0, 4);
 
             pos = pos + 3;
 
@@ -145,7 +145,7 @@ namespace MPEGTS
 
             pos = pos + 3;  // reserved_future_use byte
 
-            while (pos< posAfterTable)
+            while (pos + 5 <= posAfterTable)
             {
                 //  2 bytes
 
@@ -167,12 +167,18 @@ namespace MPEGTS
 
                 pos = pos + 2;
 
-                var posAfterdescriptorLoopLength = pos + descriptorLoopLength;
+                var posAfterdescriptorLoopLength = Math.Min(pos + descriptorLoopLength, posAfterTable);
 
-                while (pos < posAfterdescriptorLoopLength)
+                while (pos + 2 <= posAfterdescriptorLoopLength)
                 {
                     var descriptorTag = bytes[pos + 0];
                     var descriptorLength = bytes[pos + 1];
+
+                    if (pos + 2 + descriptorLength > bytes.Count)
+                    {
+                        break;
+                    }
+
                     var descriptorBytes = new byte[descriptorLength + 2]; // descriptorLength + descriptorTag + descriptorLength
                     bytes.CopyTo(pos, descriptorBytes, 0, descriptorLength + 2);
 
@@ -185,7 +191,7 @@ namespace MPEGTS
                         //Console.WriteLine($"SDT: unknown tag descriptor: {descriptorTag:X} hex ({descriptorTag} dec)");
                     }
 
-                    pos = pos + descriptorLength +2;
+                    pos = pos + descriptorLength + 2;
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace MPEGTS
 {
@@ -27,6 +27,9 @@ namespace MPEGTS
             ProgramNumber = programNumber;
             Free = free;
 
+            if (bytes == null || bytes.Length < 4)
+                return;
+
             var pos = 0;
 
             Tag =   bytes[pos + 0];
@@ -45,6 +48,9 @@ namespace MPEGTS
             }
 
             pos = pos + ProviderNameLength;
+
+            if (pos >= bytes.Length)
+                return;
 
             ServiceNameLength = bytes[pos + 0];
 

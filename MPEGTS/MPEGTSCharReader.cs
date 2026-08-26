@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Drawing;
@@ -10,6 +10,16 @@ namespace MPEGTS
 {
     public class MPEGTSCharReader
     {
+        static MPEGTSCharReader()
+        {
+            try
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            }
+            catch
+            {
+            }
+        }
         /// <summary>
         ///  [0] https://en.wikipedia.org/wiki/T.51/ISO/IEC_6937
         ///  [1] https://dvb.org/wp-content/uploads/2019/08/A038r14_Specification-for-Service-Information-SI-in-DVB-Systems_Draft_EN_300-468-v1-17-1_Dec-2021.pdf

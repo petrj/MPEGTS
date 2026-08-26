@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -309,9 +309,12 @@ namespace MPEGTS
                             {
                                 // not zero pointer field in next packet -> adding bytes to payload (except pointer field byte)
                                 var bytesFromNextPacketCount = packet.Payload[0];
-                                var buff = new byte[bytesFromNextPacketCount];
-                                packet.Payload.CopyTo(1, buff, 0, bytesFromNextPacketCount);
-                                res[currentKey].AddRange(buff);
+                                if (bytesFromNextPacketCount > 0 && bytesFromNextPacketCount < packet.Payload.Count)
+                                {
+                                    var buff = new byte[bytesFromNextPacketCount];
+                                    packet.Payload.CopyTo(1, buff, 0, bytesFromNextPacketCount);
+                                    res[currentKey].AddRange(buff);
+                                }
                             }
                         }
 
@@ -321,13 +324,19 @@ namespace MPEGTS
                         {
                             res.Add(currentKey, new List<byte>());
                         }
-                        res[currentKey].AddRange(packet.Payload);
+                        if (packet.Payload != null && packet.Payload.Count > 0)
+                        {
+                            res[currentKey].AddRange(packet.Payload);
+                        }
                     }
                     else
                     {
                         if (res.ContainsKey(currentKey))
                         {
-                            res[currentKey].AddRange(packet.Payload);
+                            if (packet.Payload != null && packet.Payload.Count > 0)
+                            {
+                                res[currentKey].AddRange(packet.Payload);
+                            }
                         }
                     }
                 }
@@ -467,10 +476,30 @@ namespace MPEGTS
                                 Payload.Add(b);
                                 break;
 
-                            case AdaptationFieldControlEnum.AdaptationFieldFollowedByPayload:
                             case AdaptationFieldControlEnum.AdaptationFieldOnlyNoPayload:
+                                if (bytePos == 4)
+                                {
+                                    AdaptationFieldLength = b;
+                                }
+                                if (AdaptationFieldLength > 0 && bytePos == 5)
+                                {
+                                    DiscontinuityIndicator = (b & 128) == 128;
+                                    RandomAccessIndicator = (b & 64) == 64;
+                                    ElementaryStreamPriorityIndicator = (b & 32) == 32;
+                                    PCRFlag = (b & 16) == 16;
+                                    OPCRFlag = (b & 8) == 8;
+                                    SplicingPointFlag = (b & 4) == 4;
+                                    TransportPrivateDataFlag = (b & 2) == 2;
+                                    AdaptationFieldExtensionFlag = (b & 1) == 1;
+                                }
+                                if (AdaptationFieldLength > 0 && PCRFlag && bytePos > 5 && bytePos < 12)
+                                {
+                                    PCR.Add(b);
+                                }
+                                AdaptationField.Add(b);
+                                break;
 
-                                // reading Adaptation field
+                            case AdaptationFieldControlEnum.AdaptationFieldFollowedByPayload:
                                 if (bytePos == 4)
                                 {
                                     AdaptationFieldLength = b;
@@ -491,14 +520,14 @@ namespace MPEGTS
                                     PCR.Add(b);
                                 }
 
-                                if (AdaptationFieldLength > 0 && bytePos >= 4 && bytePos < 4 + AdaptationFieldLength)
+                                if (bytePos <= 4 + AdaptationFieldLength)
                                 {
                                     AdaptationField.Add(b);
-                                } else
+                                }
+                                else
                                 {
                                     Payload.Add(b);
                                 }
-
                                 break;
                         }
                         break;

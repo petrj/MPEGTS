@@ -153,7 +153,38 @@ namespace Tests
             Assert.AreEqual("CRo RZ SPORT T2", descriptorsDict[16659].ServiceName);
             Assert.AreEqual("CRo POHODA T2", descriptorsDict[16660].ServiceName);
 
+        }        [TestMethod]
+        public void TestSDTVlc()
+        {
+            var path = Path.Combine("..", "..", "..", "..", "MPEGTSAnalyzator", "TestData.CZ", "vlc.ts");
+            if (!File.Exists(path))
+            {
+                path = Path.Combine("..", "MPEGTSAnalyzator", "TestData.CZ", "vlc.ts");
+            }
+            if (!File.Exists(path))
+            {
+                path = Path.Combine("MPEGTSAnalyzator", "TestData.CZ", "vlc.ts");
+            }
+            if (!File.Exists(path))
+            {
+                Assert.Inconclusive($"File {path} not found");
+                return;
+            }
+
+            var bytes = File.ReadAllBytes(path);
+            var packets = MPEGTransportStreamPacket.Parse(new List<byte>(bytes));
+            var packetsByPID = MPEGTransportStreamPacket.SortPacketsByPID(packets);
+
+            Assert.IsTrue(packetsByPID.ContainsKey(17), "PID 17 (SDT) not found in packets");
+
+            var sDTTable = DVBTTable.CreateFromPackets<SDTTable>(packetsByPID[17], 17);
+            Assert.IsNotNull(sDTTable, "Failed to parse SDT table (returned null)");
+            Assert.IsTrue(sDTTable.CRCIsValid());
+            Assert.AreEqual(65402, sDTTable.NetworkID);
+            Assert.AreEqual(1, sDTTable.ServiceDescriptors.Count);
+            Assert.AreEqual(1, sDTTable.ServiceDescriptors[0].ProgramNumber);
         }
+
 
         [TestMethod]
         public void TestSDTCA1()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MPEGTS;
@@ -101,9 +101,6 @@ namespace MPEGTSAnalyzator
                 if (sDTTable != null)
                 {
                     sDTTable.WriteToConsole();
-
-                    //saving packets fo future analyzation/tests
-                    MPEGTransportStreamPacket.SavePacketsToFile(packetsByPID[17], $"c:\\temp\\SDT.CA3.bin");
                 }
             }
 
