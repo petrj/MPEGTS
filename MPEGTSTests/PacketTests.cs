@@ -93,7 +93,7 @@ namespace Tests
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            var packetBytes = File.ReadAllBytes($"TestData{Path.DirectorySeparatorChar}EIT3.bin");
+            var packetBytes = File.ReadAllBytes($"TestData{Path.DirectorySeparatorChar}EIT{Path.DirectorySeparatorChar}EIT3.bin");
 
             // total 33 packets, one with TransportErrorIndicator=1
             // - first 12 packets (1728 bytes => 12*184) belong together, but one of them has TransportErrorIndicator=1

@@ -1,0 +1,59 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Analyzator (Debug)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build MPEGTSAnalyzator (Debug)",
+      "program": "${workspaceFolder}/MPEGTSAnalyzator/bin/Debug/net10.0/MPEGTSAnalyzator.dll",
+      "args": ["/temp/output.ts"],
+      "cwd": "${workspaceFolder}/MPEGTSAnalyzator",
+      "console": "externalTerminal",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Analyzator (Release)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build MPEGTSAnalyzator (Release)",
+      "program": "${workspaceFolder}/MPEGTSAnalyzator/bin/Release/net10.0/MPEGTSAnalyzator.dll",
+      "args": [
+        "${workspaceFolder}/MPEGTSAnalyzator/TestData.CZ/CT2.ts",
+        "--eit"
+      ],
+      "cwd": "${workspaceFolder}/MPEGTSAnalyzator",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    },
+    {
+      "name": "MPEGTSTests (dotnet test)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build MPEGTSTests (Debug)",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/MPEGTSTests/MPEGTSTests.csproj",
+        "--no-build"
+      ],
+      "cwd": "${workspaceFolder}/MPEGTSTests",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    },
+    {
+      "name": "MPEGTSTests (vstest)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build MPEGTSTests (Debug)",
+      "program": "dotnet",
+      "args": [
+        "vstest",
+        "${workspaceFolder}/MPEGTSTests/bin/Debug/net10.0/MPEGTSTests.dll"
+      ],
+      "cwd": "${workspaceFolder}/MPEGTSTests",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿using LoggerService;
+using LoggerService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MPEGTS;
 using System;
@@ -211,7 +211,7 @@ namespace Tests
             var ev = EIT.EventItems[0];
 
             Assert.AreEqual("Distretto di polizia", ev.EventName);
-            Assert.AreEqual("S7 Ep7 Genitori sbagliati/angelo della morteRosanna e' violentata in casa propria da un uomo mascherato che sembra non aver lasciato tracce: la giovane donna, sconvolta, ricorda solo che l'aggressore   aveva una lieve zoppia...Anna (Giulia Bevilacqua) e Irene (Francesca Inaudi) indagano sul caso, che presenta analogie con altri stupri rimasti irrisolti.\r\n    L'agente Guerra (Daniela Morozzi) ed Ingargiola (Gianni Ferreri) hanno invece il compito di rintracciare un detenuto evaso, strana coincidenza,   il giorno stesso che viene denunciato il furto di un prezioso pianoforte...   \r\n  Anna (Giulia Bevilacqua) e Irene (Francesca Inaudi)  sono  in un locale dove una donna ubriaca, Gabriella, sembra aver bisogno del loro aiuto. Le due agenti la accompagnano a casa e li' scoprono il corpo  senza  vita del quattordicenne Enrico, il figlio autistico della donna, immediatamente arrestata.\r\n  Ingargiola (Gianni Ferreri) e Vittoria (Daniela  Morozzi)  sono invece  sulle tracce di un celebre ipnotizzatore che spinge le sue vittime a consegn...\r\nVISIONE CONSIGLIATA CON LA PRESENZA DI UN ADULTO.", ev.Text);
+            Assert.AreEqual(("S7 Ep7 Genitori sbagliati/angelo della morteRosanna e' violentata in casa propria da un uomo mascherato che sembra non aver lasciato tracce: la giovane donna, sconvolta, ricorda solo che l'aggressore   aveva una lieve zoppia...Anna (Giulia Bevilacqua) e Irene (Francesca Inaudi) indagano sul caso, che presenta analogie con altri stupri rimasti irrisolti.\r\n    L'agente Guerra (Daniela Morozzi) ed Ingargiola (Gianni Ferreri) hanno invece il compito di rintracciare un detenuto evaso, strana coincidenza,   il giorno stesso che viene denunciato il furto di un prezioso pianoforte...   \r\n  Anna (Giulia Bevilacqua) e Irene (Francesca Inaudi)  sono  in un locale dove una donna ubriaca, Gabriella, sembra aver bisogno del loro aiuto. Le due agenti la accompagnano a casa e li' scoprono il corpo  senza  vita del quattordicenne Enrico, il figlio autistico della donna, immediatamente arrestata.\r\n  Ingargiola (Gianni Ferreri) e Vittoria (Daniela  Morozzi)  sono invece  sulle tracce di un celebre ipnotizzatore che spinge le sue vittime a consegn...\r\nVISIONE CONSIGLIATA CON LA PRESENZA DI UN ADULTO.").Replace("\r\n", Environment.NewLine), ev.Text);
             Assert.AreEqual(new DateTime(2023, 08, 16, 17, 13, 54), ev.StartTime);
             Assert.AreEqual(new DateTime(2023, 08, 16, 19, 14, 31), ev.FinishTime);
         }
@@ -239,7 +239,7 @@ namespace Tests
             }
 
             Assert.AreEqual("Un altro domani - PrimaTv", eventsDict[31936].EventName);
-            Assert.AreEqual("S1 Ep252Julia e Leo vanno avanti con i preparativi del matrimonio, contro tutto e tutti. E se Diana era contraria, i genitori di Leo non sembrano essere da meno.\r\nVISIONE CONSIGLIATA CON LA PRESENZA DI UN ADULTO.\r\nQUESTO PROGRAMMA E' SOTTOTITOLATO.", eventsDict[31936].Text);
+            Assert.AreEqual(("S1 Ep252Julia e Leo vanno avanti con i preparativi del matrimonio, contro tutto e tutti. E se Diana era contraria, i genitori di Leo non sembrano essere da meno.\r\nVISIONE CONSIGLIATA CON LA PRESENZA DI UN ADULTO.\r\nQUESTO PROGRAMMA E' SOTTOTITOLATO.").Replace("\r\n", Environment.NewLine), eventsDict[31936].Text);
             Assert.AreEqual(new DateTime(2023, 08, 16, 17, 40, 5), eventsDict[31936].StartTime);
             Assert.AreEqual(new DateTime(2023, 08, 16, 18, 46, 41), eventsDict[31936].FinishTime);
 
