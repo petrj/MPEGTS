@@ -7,7 +7,7 @@
       "request": "launch",
       "preLaunchTask": "build MPEGTSAnalyzator (Debug)",
       "program": "${workspaceFolder}/MPEGTSAnalyzator/bin/Debug/net10.0/MPEGTSAnalyzator.dll",
-      "args": ["/temp/output.ts"],
+      "args": ["${workspaceFolder}/MPEGTSAnalyzator/TestData.CZ/vlc.ts"],
       "cwd": "${workspaceFolder}/MPEGTSAnalyzator",
       "console": "externalTerminal",
       "stopAtEntry": false
